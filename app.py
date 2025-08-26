@@ -5,8 +5,8 @@ import os
 app = Flask(__name__)
 app.secret_key = 'j1s34ft43utbu76'
 
-TELEGRAM_BOT_TOKEN = '8277924160:AAGjgQqMPgblzBMiJGUahQvzcItajl_AS4o'
-TELEGRAM_CHAT_ID = '6563173583'
+TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
+TELEGRAM_CHAT_ID = os.environ.get('TELEGRAM_CHAT_ID')
 
 @app.route('/')
 def home():
